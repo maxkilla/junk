@@ -1,0 +1,41 @@
+L (popup.html)**
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Key Setup</title>
+  </head>
+  <body>
+    <div>
+      <label for="api-key">Enter OpenAI API Key:</label>
+      <input type="text" id="api-key"/>
+      <button id="save-key">Save</button>
+    </div>
+    <div>
+      <label for="model-select">Choose Model:</label>
+      <select id="model-select">
+        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+        <option value="gpt-4">GPT-4</option>
+        <option value="davinci-codex">Davinci Codex (Code)</option>
+      </select>
+      <button id="save-model">Save Model</button>
+    </div>
+    <div>
+      <label for="temperature">Temperature:</label>
+      <input type="number" id="temperature" step="0.1" min="0" max="1" value="0.7" />
+      <button id="save-temperature">Save Temperature</button>
+    </div>
+    <div>
+      <label for="max-tokens">Max Tokens:</label>
+      <input type="number" id="max-tokens" value="100" />
+      <button id="save-max-tokens">Save Max Tokens</button>
+    </div>
+    <div>
+      <button id="view-history">View History</button>
+      <ul id="history"></ul>
+    </div>
+    <p id="status"></p>
+    <script src="popup.js"></script>
+  </body>
+</html>
+```
