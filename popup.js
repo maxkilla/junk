@@ -1,4 +1,3 @@
-```javascript
 document.getElementById("save-key").addEventListener("click", () => {
   const apiKey = document.getElementById("api-key").value;
   chrome.storage.local.set({ apiKey }, () => {
@@ -36,22 +35,5 @@ document.getElementById("save-max-tokens").addEventListener("click", () => {
     setTimeout(() => {
       document.getElementById("status").innerText = "";
     }, 2000);
-  });
-
-  
-document.getElementById("view-history").addEventListener("click", () => {
-  chrome.storage.local.get({ history: [] }, (items) => {
-    const historyList = document.getElementById("history");
-    historyList.innerHTML = "";
-    items.history.forEach(entry => {
-      const { timestamp, question, answer } = entry;
-      if (timestamp && question && answer) {
-        const li = document.createElement("li");
-        li.innerText = `[${timestamp}] Q: ${question} - A: ${answer}`;
-        historyList.appendChild(li);
-      } else {
-        console.error("Invalid entry:", entry);
-      }
-    });
   });
 });
