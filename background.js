@@ -1,5 +1,3 @@
-/* Background JavaScript (background.js) */
-```javascript
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "askChatGPT",
@@ -11,6 +9,10 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "askChatGPT" && info.selectionText) {
     const apiKey = await getAPIKey();
+    if (!apiKey) {
+      console.error("API key is missing.");
+      return;
+    }
     const selectedModel = await getSelectedModel();
     const customTemperature = await getCustomTemperature();
     const customMaxTokens = await getCustomMaxTokens();
@@ -85,4 +87,3 @@ async function getCustomMaxTokens() {
     });
   });
 }
-```
