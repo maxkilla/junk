@@ -44,10 +44,13 @@ document.getElementById("view-history").addEventListener("click", () => {
     const historyList = document.getElementById("history");
     historyList.innerHTML = "";
     items.history.forEach(entry => {
-      if (entry.timestamp && entry.question && entry.answer) {
+      const { timestamp, question, answer } = entry;
+      if (timestamp && question && answer) {
         const li = document.createElement("li");
-        li.innerText = `[${entry.timestamp}] Q: ${entry.question} - A: ${entry.answer}`;
+        li.innerText = `[${timestamp}] Q: ${question} - A: ${answer}`;
         historyList.appendChild(li);
+      } else {
+        console.error("Invalid entry:", entry);
       }
     });
   });
