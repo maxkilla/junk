@@ -1,4 +1,3 @@
-// Find questions on the webpage
 document.addEventListener("DOMContentLoaded", () => {
   const questions = document.querySelectorAll("h2, h3, p");
 
@@ -11,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let currentQuestion = null;
 let isLoading = false;
+let floatingBox = null;
 
 async function handleMouseOver(event) {
   const question = event.target;
@@ -38,7 +38,7 @@ async function handleMouseOver(event) {
       },
       body: JSON.stringify({
         model: selectedModel,
-        prompt: question.innerText,
+        prompt: sanitizeInput(question.innerText),
         temperature: customTemperature,
         max_tokens: customMaxTokens
       })
@@ -89,7 +89,6 @@ function showErrorBox(question, errorMessage) {
 }
 
 function getOrCreateFloatingBox() {
-  let floatingBox = document.querySelector("#floating-answer-box");
   if (!floatingBox) {
     floatingBox = document.createElement("div");
     floatingBox.id = "floating-answer-box";
@@ -115,6 +114,7 @@ function getOrCreateFloatingBox() {
 
     closeButton.addEventListener("click", () => {
       floatingBox.remove();
+      floatingBox = null;
     });
 
     document.body.appendChild(floatingBox);
@@ -129,10 +129,20 @@ function styleFloatingBox(floatingBox, backgroundColor, borderColor, textColor) 
 }
 
 function positionFloatingBox(question, floatingBox) {
-  question.addEventListener("mousemove", e => {
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  };
+
+  const updatePosition = debounce(e => {
     floatingBox.style.left = e.pageX + 15 + "px";
     floatingBox.style.top = e.pageY + 15 + "px";
-  });
+  }, 10);
+
+  question.addEventListener("mousemove", updatePosition);
 }
 
 async function getAPIKey() {
@@ -167,6 +177,12 @@ async function getCustomMaxTokens() {
   });
 }
 
+function sanitizeInput(input) {
+  const div = document.createElement("div");
+  div.textContent = input;
+  return div.innerHTML;
+}
+
 function saveAPIKey(apiKey) {
   chrome.storage.local.set({ apiKey });
 }
@@ -183,7 +199,6 @@ function saveInteraction(question, answer) {
   });
 }
 
-// Log errors to a console tab
 function logError(error) {
   console.error("ChatGPT Hover Script Error:", error);
   let consoleContainer = document.querySelector("#console-container");
