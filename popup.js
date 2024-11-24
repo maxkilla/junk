@@ -39,16 +39,18 @@ document.getElementById("save-max-tokens").addEventListener("click", () => {
   });
 
   
-});document.getElementById("view-history").addEventListener("click", () => {
+document.getElementById("view-history").addEventListener("click", () => {
   chrome.storage.local.get({ history: [] }, (items) => {
     const historyList = document.getElementById("history");
     historyList.innerHTML = "";
     items.history.forEach(entry => {
-      const li = document.createElement("li");
-      li.innerText = `[${entry.timestamp}] Q: ${entry.question} - A: ${entry.answer}`;
-      historyList.appendChild(li);
+      if (entry.timestamp && entry.question && entry.answer) {
+        const li = document.createElement("li");
+        li.innerText = `[${entry.timestamp}] Q: ${entry.question} - A: ${entry.answer}`;
+        historyList.appendChild(li);
+      }
     });
   });
 });
-```
+
 
