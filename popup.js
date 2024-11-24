@@ -55,5 +55,3 @@ document.getElementById("view-history").addEventListener("click", () => {
     });
   });
 });
-
-
